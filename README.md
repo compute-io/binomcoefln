@@ -4,8 +4,9 @@ binomcoefln
 
 > Computes the natural logarithm of the binomial coefficient.
 
+
 <div class="equation" align="center" data-raw-text="
-f(n,k) = \ln {n \choose k} = -\ln (n+1) - \operatorname{Beta}(n-k+1,k+1)" data-equation="eq:binomcoefln_function">
+f(n,k) = \ln {n \choose k}" data-equation="eq:binomcoefln_function">
 	<img src="path" alt="Equation for the natural logarithm of the binomial coefficient.">
 	<br>
 </div>
@@ -248,7 +249,7 @@ bool = ( mat === out );
 
 ``` javascript
 var matrix = require( 'dstructs-matrix' ),
-	binomcoefln = require( 'compute-binomcoefln' );
+	 binomcoefln = require( 'compute-binomcoefln' );
 
 var data,
 	mat,
@@ -259,9 +260,9 @@ var data,
 // Plain arrays...
 data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random()*20 - 10;
+	data[ i ] = Math.round( Math.random()*20 );
 }
-out = binomcoefln( data );
+out = binomcoefln( data, 3 );
 
 // Object arrays (accessors)...
 function getValue( d ) {
@@ -272,7 +273,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': data[ i ]
 	};
 }
-out = binomcoefln( data, {
+out = binomcoefln( data, 3, {
 	'accessor': getValue
 });
 
@@ -282,7 +283,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': [ i, data[ i ].x ]
 	};
 }
-out = binomcoefln( data, {
+out = binomcoefln( data, 3, {
 	'path': 'x/1',
 	'sep': '/'
 });
@@ -290,9 +291,9 @@ out = binomcoefln( data, {
 // Typed arrays...
 data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random() * 100;
+	data[ i ] = Math.round( Math.random()*20 );
 }
-tmp = binomcoefln( data );
+tmp = binomcoefln( data, 3 );
 out = '';
 for ( i = 0; i < data.length; i++ ) {
 	out += tmp[ i ];
@@ -303,11 +304,10 @@ for ( i = 0; i < data.length; i++ ) {
 
 // Matrices...
 mat = matrix( data, [5,2], 'int32' );
-out = binomcoefln( mat );
-
+out = binomcoefln( mat, 3 );
 
 // Matrices (custom output data type)...
-out = binomcoefln( mat, {
+out = binomcoefln( mat, 3, {
 	'dtype': 'uint8'
 });
 ```

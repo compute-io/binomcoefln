@@ -13,9 +13,9 @@ var data,
 // Plain arrays...
 data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random()*20 - 10;
+	data[ i ] = Math.round( Math.random()*20 );
 }
-out = binomcoefln( data );
+out = binomcoefln( data, 3 );
 console.log( 'Arrays: %s\n', out );
 
 
@@ -29,7 +29,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': data[ i ]
 	};
 }
-out = binomcoefln( data, {
+out = binomcoefln( data, 3, {
 	'accessor': getValue
 });
 console.log( 'Accessors: %s\n', out );
@@ -42,7 +42,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': [ i, data[ i ].x ]
 	};
 }
-out = binomcoefln( data, {
+out = binomcoefln( data, 3, {
 	'path': 'x/1',
 	'sep': '/'
 });
@@ -55,9 +55,9 @@ console.log( '\n' );
 // Typed arrays...
 data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random() * 100;
+	data[ i ] = Math.round( Math.random()*20 );
 }
-tmp = binomcoefln( data );
+tmp = binomcoefln( data, 3 );
 out = '';
 for ( i = 0; i < data.length; i++ ) {
 	out += tmp[ i ];
@@ -71,13 +71,13 @@ console.log( 'Typed arrays: %s\n', out );
 // ----
 // Matrices...
 mat = matrix( data, [5,2], 'int32' );
-out = binomcoefln( mat );
+out = binomcoefln( mat, 3 );
 console.log( 'Matrix: %s\n', out.toString() );
 
 
 // ----
 // Matrices (custom output data type)...
-out = binomcoefln( mat, {
+out = binomcoefln( mat, 3, {
 	'dtype': 'uint8'
 });
 console.log( 'Matrix (%s): %s\n', out.dtype, out.toString() );
