@@ -7,7 +7,7 @@ binomcoefln
 
 <div class="equation" align="center" data-raw-text="
 f(n,k) = \ln {n \choose k}" data-equation="eq:binomcoefln_function">
-	<img src="path" alt="Equation for the natural logarithm of the binomial coefficient.">
+	<img src="https://cdn.rawgit.com/compute-io/binomcoefln/5cc990e7956f2689e011ccba84835f6dd6733ca4/docs/img/eqn.svg" alt="Equation for the natural logarithm of the binomial coefficient.">
 	<br>
 </div>
 
