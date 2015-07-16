@@ -42,14 +42,14 @@ describe( 'array binomcoefln', function tests() {
 			];
 			actual = new Array( data.length );
 
-			actual = binomcoefln( actual, data, 2 );
+			actual = binomcoefln( actual, data, 1 );
 
 			expected = [
-				1,
-				4,
-				9,
-				16,
-				25
+				0,
+				0.693147180559945,
+				1.09861228866811,
+				1.38629436111989,
+				1.6094379124341
 			];
 
 			assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -58,7 +58,7 @@ describe( 'array binomcoefln', function tests() {
 			data = new Int32Array( data );
 			actual = new Int32Array( data.length );
 
-			actual = binomcoefln( actual, data, 2 );
+			actual = binomcoefln( actual, data, 1 );
 			expected = new Int32Array( expected );
 
 			assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -87,7 +87,7 @@ describe( 'array binomcoefln', function tests() {
 			actual = binomcoefln( actual, data, y );
 
 			expected = [
-
+				0, 0, 0, 0, 0
 			];
 
 			assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -138,7 +138,7 @@ describe( 'array binomcoefln', function tests() {
 			y = new Int32Array( [1,2,3] );
 			actual = new Array( data.length );
 			actual = binomcoefln( actual, data, y );
-			expected = [ 1, NaN, 27 ];
+			expected = [ 0, NaN, 0 ];
 
 			assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 

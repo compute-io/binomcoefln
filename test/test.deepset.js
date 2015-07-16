@@ -34,19 +34,19 @@ describe( 'deepset binomcoefln', function tests() {
 		var data, actual, expected;
 
 		data = [
-			{'x':0},
+			{'x':0.5},
 			{'x':1},
-			{'x':2},
-			{'x':3}
+			{'x':1.5},
+			{'x':2}
 		];
 
-		actual = binomcoefln( data, 2, 'x' );
+		actual = binomcoefln( data, 1, 'x' );
 
 		expected = [
+			{'x':-0.693147180559945},
 			{'x':0},
-			{'x':1},
-			{'x':4},
-			{'x':9}
+			{'x':0.405465108108164},
+			{'x':0.693147180559945}
 		];
 
 		assert.strictEqual( data, actual );
@@ -54,18 +54,18 @@ describe( 'deepset binomcoefln', function tests() {
 
 		// Custom separator...
 		data = [
-			{'x':[9,0]},
+			{'x':[9,0.5]},
 			{'x':[9,1]},
-			{'x':[9,2]},
-			{'x':[9,3]}
+			{'x':[9,1.5]},
+			{'x':[9,2]}
 		];
 
-		data = binomcoefln( data, 2, 'x/1', '/' );
+		actual = binomcoefln( data, 1, 'x/1', '/' );
 		expected = [
+			{'x':[9,-0.693147180559945]},
 			{'x':[9,0]},
-			{'x':[9,1]},
-			{'x':[9,4]},
-			{'x':[9,9]}
+			{'x':[9,0.405465108108164]},
+			{'x':[9,0.693147180559945]}
 		];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -86,10 +86,10 @@ describe( 'deepset binomcoefln', function tests() {
 		actual = binomcoefln( data, y, 'x' );
 
 		expected = [
-			{'x':1},
-			{'x':1},
-			{'x':4},
-			{'x':27}
+			{'x':0},
+			{'x':0},
+			{'x':0},
+			{'x':0}
 		];
 
 		assert.strictEqual( data, actual );
@@ -105,10 +105,10 @@ describe( 'deepset binomcoefln', function tests() {
 
 		data = binomcoefln( data, y, 'x/1', '/' );
 		expected = [
-			{'x':[9,1]},
-			{'x':[9,1]},
-			{'x':[9,4]},
-			{'x':[9,27]}
+			{'x':[9,0]},
+			{'x':[9,0]},
+			{'x':[9,0]},
+			{'x':[9,0]}
 		];
 
 		assert.isTrue( deepCloseTo( data, expected, 1e-7 ) );
@@ -150,9 +150,9 @@ describe( 'deepset binomcoefln', function tests() {
 		actual = binomcoefln( data, 1, 'x.1' );
 		expected = [
 			{'x':[9,NaN]},
-			{'x':[9,1]},
+			{'x':[9,0]},
 			{'x':[9,NaN]},
-			{'x':[9,3]}
+			{'x':[9,1.09861228866811]}
 		];
 		assert.isTrue( deepCloseTo( data, expected, 1e-7 ) );
 
@@ -166,9 +166,9 @@ describe( 'deepset binomcoefln', function tests() {
 		actual = binomcoefln( data, y, 'x.1' );
 		expected = [
 			{'x':[9,NaN]},
-			{'x':[9,1]},
+			{'x':[9,0]},
 			{'x':[9,NaN]},
-			{'x':[9,27]}
+			{'x':[9,0]}
 		];
 		assert.isTrue( deepCloseTo( data, expected, 1e-7 ) );
 
@@ -182,9 +182,9 @@ describe( 'deepset binomcoefln', function tests() {
 		actual = binomcoefln( data, y, 'x.1' );
 		expected = [
 			{'x':[9,NaN]},
-			{'x':[9,1]},
+			{'x':[9,0]},
 			{'x':[9,NaN]},
-			{'x':[9,27]}
+			{'x':[9,0]}
 		];
 		assert.isTrue( deepCloseTo( data, expected, 1e-7 ) );
 	});
@@ -203,7 +203,7 @@ describe( 'deepset binomcoefln', function tests() {
 
 		expect( foo ).to.throw( Error );
 		function foo() {
-			binomcoef(data, y, 'x.1' );
+			binomcoefln(data, y, 'x.1' );
 		}
 	});
 

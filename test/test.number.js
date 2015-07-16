@@ -25,7 +25,13 @@ describe( 'number binomcoefln', function tests() {
 	});
 
 	it( 'should evaluate the function', function test() {
-		assert.closeTo( binomcoefln( 0, 0 ), 0, 1e-4 );
+		assert.strictEqual( binomcoefln( 1, 1 ), 0 );
+		assert.strictEqual( binomcoefln( 0, 0 ), 0 );
+		assert.strictEqual( binomcoefln( 4, 5 ), Number.NEGATIVE_INFINITY );
+		assert.closeTo( binomcoefln( 2.5, 1 ), 0.9162907, 1e-7 );
+		assert.closeTo( binomcoefln( 5, 3 ), 2.302585, 1e-7 );
+		assert.closeTo( binomcoefln( 4, 2.2 ), Math.log( 5.9058667 ), 1e-7 );
+		assert.closeTo( binomcoefln( 5.5, 2.2 ), Math.log( 13.411817 ), 1e-7 );
 	});
 
 });

@@ -32,28 +32,33 @@ describe( 'typed-array binomcoefln', function tests() {
 
 
 	it( 'should evaluate the function when x and y are typed arrays', function test() {
-		var data, actual, expected, y;
+		var data, actual, expected, y, i;
 
 		data = new Float64Array([
-			0,
-			1,
-			2,
-			3
+			2, 4, 8, 12, 16
 		]);
 		y = new Float64Array([
-			0,
 			1,
 			2,
-			3
+			4,
+			6,
+			8
 		]);
 		actual = new Float64Array( data.length );
 
 		actual = binomcoefln( actual, data, y );
 
-		expected = new Float64Array( [1,1,4,27] );
+		expected = new Float64Array([
+			0.693147180559945,
+			1.79175946922806,
+			4.24849524204936,
+			6.82871207164168,
+			9.46265430059017
+		]);
 
-		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
-
+		for ( i = 0; i < actual.length; i++ ) {
+			assert.closeTo( actual[ i ], expected[ i ], 1e-7 );
+		}
 	});
 
 	it( 'should throw an error if provided two typed arrays of differing lengths', function test() {
@@ -88,7 +93,7 @@ describe( 'typed-array binomcoefln', function tests() {
 		y = [ 1, 2, 3, null ];
 		actual = binomcoefln( actual, data, y );
 
-		expected = [ 1, 4, 27, NaN ];
+		expected = [ 0, 0, 0, NaN ];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 

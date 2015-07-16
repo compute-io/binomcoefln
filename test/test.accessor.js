@@ -34,16 +34,19 @@ describe( 'accessor binomcoefln', function tests() {
 		var data, actual, expected;
 
 		data = [
-			{'x':0},
-			{'x':1},
 			{'x':2},
-			{'x':3}
+			{'x':4},
+			{'x':6},
+			{'x':8}
 		];
 		actual = new Array( data.length );
 		actual = binomcoefln( actual, data, 2, getValue );
 
 		expected = [
-
+			0,
+			1.79175946922806,
+			2.70805020110221,
+			3.3322045101752
 		];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -75,7 +78,7 @@ describe( 'accessor binomcoefln', function tests() {
 		actual = binomcoefln( actual, data, y, getValue );
 
 		expected = [
-
+			0, 0, 0, 0
 		];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -107,7 +110,7 @@ describe( 'accessor binomcoefln', function tests() {
 		actual = binomcoefln( actual, data, y, getValue );
 
 		expected = [
-
+			0, 0, 0, 0
 		];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -141,7 +144,7 @@ describe( 'accessor binomcoefln', function tests() {
 		actual = new Array( data.length );
 		actual = binomcoefln( actual, data, 1, getValue );
 
-		expected = [ 1, NaN, 3 ];
+		expected = [ 0, NaN, 1.09861228866811 ];
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 
 		// single non-numeric value
@@ -156,7 +159,7 @@ describe( 'accessor binomcoefln', function tests() {
 		y = [ 1, 2, 3 ];
 		actual = new Array( data.length );
 		actual = binomcoefln( actual, data, y, getValue );
-		expected = [ 1, NaN, 27 ];
+		expected = [ 0, NaN, 0 ];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 
@@ -168,7 +171,7 @@ describe( 'accessor binomcoefln', function tests() {
 		y = new Int32Array( [1,2,3] );
 		actual = new Array( data.length );
 		actual = binomcoefln( actual, data, y, getValue );
-		expected = [ 1, NaN, 27 ];
+		expected = [ 0, NaN, 0 ];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 
@@ -180,7 +183,7 @@ describe( 'accessor binomcoefln', function tests() {
 		];
 		actual = new Array( data.length );
 		actual = binomcoefln( actual, data, y, getValue2 );
-		expected = [ 1, NaN, 27 ];
+		expected = [ 0, NaN, 0 ];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 

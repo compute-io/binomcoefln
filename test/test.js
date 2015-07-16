@@ -135,7 +135,7 @@ describe( 'compute-binomcoefln', function tests() {
 	it( 'should throw an error if provided only one argument', function test() {
 		expect( badValue ).to.throw( Error );
 		function badValue() {
-				binomcoef( [1,2,3] );
+				binomcoefln( [1,2,3] );
 		}
 	});
 
@@ -173,25 +173,32 @@ describe( 'compute-binomcoefln', function tests() {
 	});
 
 	it( 'should evaluate the  binomcoefln function for two numbers', function test() {
-		assert.strictEqual( binomcoefln( 2, 4 ), 16 );
-		assert.strictEqual( binomcoefln( 3, 3 ), 27 );
+		assert.closeTo( binomcoefln( 4, 2 ), 1.79175946922806, 1e-7 );
+		assert.strictEqual( binomcoefln( 3, 3 ), 0 );
 	});
 
 	it( 'should evaluate the  binomcoefln function for a scalar and an array', function test() {
 		var data, actual, expected;
 		data = [ 1, 2 ];
 		actual = binomcoefln( 2, data );
-		expected = [ 2, 4 ];
+		expected = [ 0.693147180559945, 0 ];
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 	});
 
 	it( 'should evaluate the  binomcoefln function for a scalar and a matrix', function test() {
-		var data, actual, expected;
+		var data, actual, expected, i;
 		data = matrix( new Int8Array( [ 1,2,3,4 ] ), [2,2] );
-		actual = binomcoefln( 2, data );
-		expected = matrix( new Float64Array( [2,4,8,16] ), [2,2] );
+		actual = binomcoefln( 5, data );
+		expected = matrix( new Float64Array([
+			1.6094379124341,
+			2.30258509299405,
+			2.30258509299405,
+			1.6094379124341
+		]), [2,2] );
 
-		assert.deepEqual( actual.data, expected.data );
+		for ( i = 0; i < actual.length; i++ ) {
+			assert.closeTo( actual.data[ i ], expected.data[ i ], 1e-7 );
+		}
 	});
 
 
@@ -201,7 +208,7 @@ describe( 'compute-binomcoefln', function tests() {
 		actual = binomcoefln( 10, data, {
 			'dtype':'int32'
 		});
-		expected = new Int32Array( [10,100] );
+		expected = new Int32Array( [2,3] );
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 	});
 
@@ -209,10 +216,10 @@ describe( 'compute-binomcoefln', function tests() {
 	it( 'should evaluate the binomcoefln function for a scalar and a matrix and cast to a different dtype', function test() {
 		var data, actual, expected;
 		data = matrix( new Int8Array( [ 1,2,3,4 ] ), [2,2] );
-		actual = binomcoefln( 2, data, {
+		actual = binomcoefln( 10, data, {
 			'dtype': 'int32'
 		});
-		expected = matrix( new Int32Array( [2,4,8,16] ), [2,2] );
+		expected = matrix( new Int32Array( [2,3,4,5] ), [2,2] );
 
 		assert.strictEqual( actual.dtype, 'int32' );
 		assert.deepEqual( actual.data, expected.data );
@@ -221,33 +228,41 @@ describe( 'compute-binomcoefln', function tests() {
 	it( 'should evaluate the binomcoefln function for a matrix and a scalar and cast to a different dtype', function test() {
 		var data, actual, expected;
 		data = matrix( new Int8Array( [1,2,3,4] ), [2,2] );
-		actual = binomcoefln( data, 2, {
+		actual = binomcoefln( data, 1, {
 			'dtype': 'int32'
 		});
-		expected = matrix( new Int32Array( [2,4,8,16] ), [2,2] );
+		expected = matrix( new Int32Array( [0,0,1,1] ), [2,2] );
 
 		assert.strictEqual( actual.dtype, 'int32' );
 		assert.deepEqual( actual.data, expected.data );
+
 	});
 
 	it( 'should evaluate the binomcoefln function for a plain array and a scalar', function test() {
 		var data, actual, expected;
 
-		data = [ 0, 1, 2, 3 ];
+		data = [
+			1,
+			2,
+			3,
+			4,
+			5
+		];
 		expected = [
 			0,
-			1,
-			8,
-			27
+			0.693147180559945,
+			1.09861228866811,
+			1.38629436111989,
+			1.6094379124341
 		];
 
-		actual = binomcoefln( data, 3 );
+		actual = binomcoefln( data, 1 );
 		assert.notEqual( actual, data );
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 
 		// Mutate...
-		actual = binomcoefln( data, 3, {
+		actual = binomcoefln( data, 1, {
 			'copy': false
 		});
 		assert.strictEqual( actual, data );
@@ -261,10 +276,7 @@ describe( 'compute-binomcoefln', function tests() {
 
 		data = [ 0, 1, 2, 3 ];
 		expected = [
-			1,
-			1,
-			4,
-			27
+			0, 0, 0, 0
 		];
 
 		actual = binomcoefln( data, data );
@@ -283,30 +295,35 @@ describe( 'compute-binomcoefln', function tests() {
 	});
 
 	it( 'should evaluate the binomcoefln function for a typed array and a scalar', function test() {
-		var data, actual, expected;
+		var data, actual, expected, i;
 
-		data = new Int8Array( [ 0, 1, 2, 3 ] );
+		data = new Int8Array( [ 1, 2, 3, 4, 5 ] );
 
 		expected = new Float64Array( [
 			0,
-			1,
-			8,
-			27
+			0.693147180559945,
+			1.09861228866811,
+			1.38629436111989,
+			1.6094379124341
 		]);
 
-		actual = binomcoefln( data, 3 );
+		actual = binomcoefln( data, 1 );
 		assert.notEqual( actual, data );
 
-		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
+		for ( i = 0; i < actual.length; i++ ) {
+			assert.closeTo( actual[ i ], expected[ i ], 1e-7 );
+		}
 
 		// Mutate:
-		actual = binomcoefln( data, 3, {
+		actual = binomcoefln( data, 1, {
 			'copy': false
 		});
 		assert.strictEqual( actual, data );
-		expected = new Int8Array( [ 0, 1, 8, 27 ] );
+		expected = new Int8Array( [0,0,1,1,1] );
 
-		assert.isTrue( deepCloseTo( data, expected, 1e-7 ) );
+		for ( i = 0; i < actual.length; i++ ) {
+			assert.closeTo( actual[ i ], expected[ i ], 1e-7 );
+		}
 	});
 
 	it( 'should evaluate the binomcoefln function for a typed array and another typed array', function test() {
@@ -315,10 +332,10 @@ describe( 'compute-binomcoefln', function tests() {
 		data = new Int8Array( [ 0, 1, 2, 3 ] );
 
 		expected = new Float64Array( [
-			1,
-			1,
-			4,
-			27
+			0,
+			0,
+			0,
+			0
 		]);
 
 		actual = binomcoefln( data, data );
@@ -330,7 +347,7 @@ describe( 'compute-binomcoefln', function tests() {
 		actual = binomcoefln( data, data, {
 			'copy': false
 		});
-		expected = new Int8Array( [ 1, 1, 4, 27 ] );
+		expected = new Int8Array( [0,0,0,0] );
 		assert.strictEqual( actual, data );
 
 		assert.isTrue( deepCloseTo( data, expected, 1e-7 ) );
@@ -339,10 +356,10 @@ describe( 'compute-binomcoefln', function tests() {
 	it( 'should evaluate the binomcoefln function for a typed array and a scalar and return an array of a specific type', function test() {
 		var data, actual, expected;
 
-		data = [ 0, 1, 2, 3 ];
-		expected = new Int8Array( [ 0, 1, 16, 81 ] );
+		data = [ 1, 2, 3, 4, 5 ];
+		expected = new Int8Array( [ 0,0,1,1,1 ] );
 
-		actual = binomcoefln( data, 4, {
+		actual = binomcoefln( data, 1, {
 			'dtype': 'int8'
 		});
 		assert.notEqual( actual, data );
@@ -354,20 +371,20 @@ describe( 'compute-binomcoefln', function tests() {
 		var data, actual, expected;
 
 		data = [
-			[3,0],
-			[4,1],
-			[5,2],
-			[6,3]
+			[0,2],
+			[1,4],
+			[2,6],
+			[3,8]
 		];
 
 		expected = [
-			1,
-			1,
-			1,
-			1
+			0,
+			1.79175946922806,
+			2.70805020110221,
+			3.3322045101752
 		];
 
-		actual = binomcoefln( data, 0, {
+		actual = binomcoefln( data, 2, {
 			'accessor': getValue
 		});
 		assert.notEqual( actual, data );
@@ -375,7 +392,7 @@ describe( 'compute-binomcoefln', function tests() {
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
 
 		// Mutate:
-		actual = binomcoefln( data, 0, {
+		actual = binomcoefln( data, 2, {
 			'accessor': getValue,
 			'copy': false
 		});
@@ -410,10 +427,7 @@ describe( 'compute-binomcoefln', function tests() {
 		});
 
 		expected = [
-			1,
-			1,
-			4,
-			27
+			0, 0, 0, 0
 		];
 
 		assert.isTrue( deepCloseTo( actual, expected, 1e-7 ) );
@@ -432,19 +446,19 @@ describe( 'compute-binomcoefln', function tests() {
 		var data, actual, expected;
 
 		data = [
-			{'x':[3,0]},
-			{'x':[4,1]},
-			{'x':[5,2]},
-			{'x':[6,3]}
+			{'x':[9,0.5]},
+			{'x':[9,1]},
+			{'x':[9,1.5]},
+			{'x':[9,2]}
 		];
 		expected = [
-			{'x':[3,0]},
-			{'x':[4,1]},
-			{'x':[5,8]},
-			{'x':[6,27]}
+			{'x':[9,-0.693147180559945]},
+			{'x':[9,0]},
+			{'x':[9,0.405465108108164]},
+			{'x':[9,0.693147180559945]}
 		];
 
-		actual = binomcoefln( data, 3, {
+		actual = binomcoefln( data, 1, {
 			'path': 'x.1'
 		});
 
@@ -454,12 +468,12 @@ describe( 'compute-binomcoefln', function tests() {
 
 		// Specify a path with a custom separator...
 		data = [
-			{'x':[3,0]},
-			{'x':[4,1]},
-			{'x':[5,2]},
-			{'x':[6,3]}
+			{'x':[9,0.5]},
+			{'x':[9,1]},
+			{'x':[9,1.5]},
+			{'x':[9,2]}
 		];
-		actual = binomcoefln( data, 3, {
+		actual = binomcoefln( data, 1, {
 			'path': 'x/1',
 			'sep': '/'
 		});
@@ -485,10 +499,10 @@ describe( 'compute-binomcoefln', function tests() {
 		});
 
 		expected = [
-			{'x':1},
-			{'x':1},
-			{'x':4},
-			{'x':27}
+			{'x':0},
+			{'x':0},
+			{'x':0},
+			{'x':0}
 		];
 
 		assert.strictEqual( data, actual );
@@ -507,10 +521,10 @@ describe( 'compute-binomcoefln', function tests() {
 			'sep': '/'
 		});
 		expected = [
-			{'x':[9,1]},
-			{'x':[9,1]},
-			{'x':[9,4]},
-			{'x':[9,27]}
+			{'x':[9,0]},
+			{'x':[9,0]},
+			{'x':[9,0]},
+			{'x':[9,0]}
 		];
 
 		assert.isTrue( deepCloseTo( data, expected, 1e-7 ), 'custom separator' );
