@@ -32,6 +32,9 @@ describe( 'number binomcoefln', function tests() {
 		assert.closeTo( binomcoefln( 5, 3 ), 2.302585, 1e-7 );
 		assert.closeTo( binomcoefln( 4, 2.2 ), Math.log( 5.9058667 ), 1e-7 );
 		assert.closeTo( binomcoefln( 5.5, 2.2 ), Math.log( 13.411817 ), 1e-7 );
+		assert.closeTo( binomcoefln( 5.5, 2.2 ), Math.log( 13.411817 ), 1e-7 );
+		assert.strictEqual( binomcoefln( 3, -2 ), Number.NEGATIVE_INFINITY );
+		assert.closeTo( binomcoefln( -3, 2 ), 1.791759469228053, 1e-7 );
 	});
 
 });
