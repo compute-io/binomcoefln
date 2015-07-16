@@ -4,6 +4,11 @@ binomcoefln
 
 > Computes the natural logarithm of the binomial coefficient.
 
+<div class="equation" align="center" data-raw-text="
+f(n,k) = \ln {n \choose k} = -\ln (n+1) - \operatorname{Beta}(n-k+1,k+1)" data-equation="eq:binomcoefln_function">
+	<img src="path" alt="Equation for the natural logarithm of the binomial coefficient.">
+	<br>
+</div>
 
 ## Installation
 
@@ -22,7 +27,7 @@ var binomcoefln = require( 'compute-binomcoefln' );
 
 #### binomcoefln( x[, options] )
 
-Evaluates the [error function](http://en.wikipedia.org/wiki/Error_function) (element-wise). `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix). 
+Evaluates the [error function](http://en.wikipedia.org/wiki/Error_function) (element-wise). `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).
 
 ``` javascript
 var matrix = require( 'dstructs-matrix' ),
