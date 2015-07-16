@@ -2,14 +2,17 @@ binomcoefln
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Computes the natural logarithm of the binomial coefficient.
+> Computes the natural logarithm of the [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient).
 
+The `binomialcoefln` function computes the natural logarithm of the [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient), i.e. 
 
 <div class="equation" align="center" data-raw-text="
 f(n,k) = \ln {n \choose k}" data-equation="eq:binomcoefln_function">
 	<img src="https://cdn.rawgit.com/compute-io/binomcoefln/5cc990e7956f2689e011ccba84835f6dd6733ca4/docs/img/eqn.svg" alt="Equation for the natural logarithm of the binomial coefficient.">
 	<br>
 </div>
+
+for any numbers `n` and `k`. Hence, the function supports the generalization of the [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient) to negative integers and real numbers in general. 
 
 ## Installation
 
@@ -26,9 +29,9 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 var binomcoefln = require( 'compute-binomcoefln' );
 ```
 
-#### binomcoefln( x[, options] )
+#### binomcoefln( n, k[, options] )
 
-Evaluates the [error function](http://en.wikipedia.org/wiki/Error_function) (element-wise). `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).
+Computes the natural logarithm of the [Binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient) (element-wise). `n` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).  `k` has to be either an `array` or `matrix` of equal dimensions as `n` or a single number. Correspondingly, the function returns either an `array` with the same length as the input `array(s)`, a `matrix` with the same dimensions as the input `matrix/matrices` or a single number.
 
 ``` javascript
 var matrix = require( 'dstructs-matrix' ),
@@ -37,19 +40,37 @@ var matrix = require( 'dstructs-matrix' ),
 	out,
 	i;
 
-out = binomcoefln( -1 );
-// returns -0.8427
+out = binomcoefln( 10, 2 );
+// returns ~3.807
 
-out = binomcoefln( [ -10, -1, 0, 1, 10 ] );
-// returns [ -1, -0.8427, 0, 0.8427, 1 ]
+out = binomcoefln( 0, 0 );
+// returns 0
 
-data = [ 0, 1, 2 ];
-out = binomcoefln( data );
-// returns [ 0, ~0.8427007, ~0.9953222 ]
+/*
+Handles negative numbers:
+*/
+out = binomcoefln( -1, 2 );
+// returns 0
+
+out = binomcoefln( -5, 4 );
+// returns ~4.248
+
+/*
+Generalized version for real numbers:
+*/
+out = binomcoefln( 4.4, 2 );
+// returns ~2.012
+
+out = binomcoefln( 4.4, 1.5 );
+// returns ~1.845
+
+data = [ 0.5, 1, 1.5, 2, 2.5 ];
+out = binomcoefln( data, 0.1 );
+// returns [ ~0.049, ~0.089, ~0.118, ~0.140, ~0.159 ]
 
 data = new Int8Array( data );
 out = binomcoefln( data );
-// returns Float64Array( [ 0, ~0.8427007, ~0.9953222 ] )
+// returns Float64Array( [ ~0.049, ~0.089, ~0.118, ~0.140, ~0.159 ] )
 
 data = new Float64Array( 6 );
 for ( i = 0; i < 6; i++ ) {
@@ -62,11 +83,11 @@ mat = matrix( data, [3,2], 'float64' );
 	  2  2.5 ]
 */
 
-out = binomcoefln( mat );
+out = binomcoefln( mat, 0.1 );
 /*
-	[  0    ~0.52
-	  ~0.84 ~0.97
-	  ~1    ~1    ]
+	[  ~-0.017 ~0.049
+	   ~0.089  ~0.118
+	   ~0.140  ~0.159 ]
 */
 ```
 
@@ -82,42 +103,77 @@ For non-numeric `arrays`, provide an accessor `function` for accessing `array` v
 
 ``` javascript
 var data = [
-	['beep', -10],
-	['boop', -1],
-	['bip', 0],
-	['bap', 1],
-	['baz', 10]
+	['beep', 0.5 ],
+	['boop', 1 ], 
+	['bip', 1.5 ],
+	['bap', 2 ],
+	['baz', 2.5 ]
 ];
 
 function getValue( d, i ) {
 	return d[ 1 ];
 }
 
-var out = binomcoefln( data, {
+var out = binomcoefln( data, 0.1, {
 	'accessor': getValue
 });
-// returns [ -1, -0.8427, 0, 0.8427, 1 ]
+// returns [ ~0.049, ~0.089, ~0.118, ~0.140, ~0.159 ]
 ```
+
+
+When evaluating the [Beta function](https://en.wikipedia.org/wiki/Beta_function) for values of two object `arrays`, provide an accessor `function` which accepts `3` arguments.
+
+``` javascript
+var data = [
+	['beep', 0.5],
+	['boop', 1],
+	['bip', 1.5],
+	['bap', 2],
+	['baz', 2.5]
+];
+
+var k = [
+	{'x': 0.5},
+	{'x': 1},
+	{'x': 1.5.},
+	{'x': 2},
+	{'x': 2.5}
+];
+
+function getValue( d, i, j ) {
+	if ( j === 0 ) {
+		return d[ 1 ];
+	}
+	return d.x;
+}
+
+var out = beta( data, y, {
+	'accessor': getValue
+});
+// returns [ ~0, ~0, ~0, ~0, ~0 ]
+```
+
+__Note__: `j` corresponds to the input `array` index, where `j=0` is the index for the first input `array` and `j=1` is the index for the second input `array`.
 
 To [deepset](https://github.com/kgryte/utils-deep-set) an object `array`, provide a key path and, optionally, a key path separator.
 
 ``` javascript
 var data = [
-	{'x':[0,-10]},
-	{'x':[1,-1]},
-	{'x':[2,0]},
-	{'x':[3,1]},
-	{'x':[4,10]}
+	{'x':[0,0.5]},
+	{'x':[1,1]},
+	{'x':[2,1.5]},
+	{'x':[3,2]},
+	{'x':[4,2.5]}
 ];
 
-var out = binomcoefln( data, 'x|1', '|' );
+var out = binomcoefln( data, 0.1, 'x|1', '|' );
 /*
 	[
-		{'x':[0,-1]},
-		{'x':[1,-0.8427]},
-		{'x':[2,0]},
-		{'x':[3,0.8427]},
-		{'x':[4,1]}
+		{'x':[0,~0.049]},
+		{'x':[1,~0.089]},
+		{'x':[2,~0.118]},
+		{'x':[3,~0.140]},
+		{'x':[4,~0.159]}
 	]
 */
 
@@ -130,18 +186,18 @@ By default, when provided a [`typed array`](https://developer.mozilla.org/en-US/
 ``` javascript
 var data, out;
 
-data = new Int8Array( [0, 1, 2] );
+data = new Int8Array( [10,20,30] );
 
 out = binomcoefln( data, {
 	'dtype': 'int32'
 });
-// returns Int32Array( [0,0,0] )
+// returns Int32Array( [3,5,6] )
 
 // Works for plain arrays, as well...
-out = binomcoefln( [0, 1, 2], {
+out = binomcoefln( [10,20,30], {
 	'dtype': 'uint8'
 });
-// returns Uint8Array( [0,0,0] )
+// returns Uint8Array( [3,5,6] )
 ```
 
 By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
@@ -153,12 +209,12 @@ var data,
 	out,
 	i;
 
-var data = [ -10, -1, 0, 1, 10 ];
+var data = [ 0.5, 1, 1.5, 2, 2.5 ];
 
-var out = binomcoefln( data, {
+var out = binomcoefln( data, 0.1, {
 	'copy': false
 });
-// returns [ -1, -0.8427, 0, 0.8427, 1 ]
+// returns [ ~0.049, ~0.089, ~0.118, ~0.140, ~0.159 ]
 
 bool = ( data === out );
 // returns true
@@ -174,13 +230,13 @@ mat = matrix( data, [3,2], 'float64' );
 	  2  2.5 ]
 */
 
-out = binomcoefln( mat, {
+out = binomcoefln( mat, 0.1, {
 	'copy': false
 });
 /*
-	[  0    ~0.52
-	  ~0.84 ~0.97
-	  ~1    ~1    ]
+	[  ~-0.017 ~0.049
+	   ~0.089  ~0.118
+	   ~0.140  ~0.159 ]
 */
 
 bool = ( mat === out );
@@ -195,16 +251,16 @@ bool = ( mat === out );
 	``` javascript
 	var data, out;
 
-	out = binomcoefln( null );
+	out = binomcoefln( null, 1 );
 	// returns NaN
 
-	out = binomcoefln( true );
+	out = binomcoefln( true, 1 );
 	// returns NaN
 
-	out = binomcoefln( {'a':'b'} );
+	out = binomcoefln( {'a':'b'}, 1 );
 	// returns NaN
 
-	out = binomcoefln( [ true, null, [] ] );
+	out = binomcoefln( [ true, null, [] ], 1 );
 	// returns [ NaN, NaN, NaN ]
 
 	function getValue( d, i ) {
@@ -217,12 +273,12 @@ bool = ( mat === out );
 		{'x':null}
 	];
 
-	out = binomcoefln( data, {
+	out = binomcoefln( data, 1, {
 		'accessor': getValue
 	});
 	// returns [ NaN, NaN, NaN, NaN ]
 
-	out = binomcoefln( data, {
+	out = binomcoefln( data, 1, {
 		'path': 'x'
 	});
 	/*
@@ -238,7 +294,7 @@ bool = ( mat === out );
 *	Be careful when providing a data structure which contains non-numeric elements and specifying an `integer` output data type, as `NaN` values are cast to `0`.
 
 	``` javascript
-	var out = binomcoefln( [ true, null, [] ], {
+	var out = binomcoefln( [ true, null, [] ], 0.1,  {
 		'dtype': 'int8'
 	});
 	// returns Int8Array( [0,0,0] );
